@@ -21,7 +21,7 @@ class PlayerController extends AbstractController
                 "Accept-Language"=> "pl",
                 "Accept-Charset"=> "application/x-www-form-urlencoded; charset=UTF-8",
                 "Origin"=>"https://developer.riotgames.com",
-                "X-Riot-Token"=> "RGAPI-e6496e1c-7957-427d-9ead-cdb0b82358fc"
+                "X-Riot-Token"=> ""
     ],       ]);
 
 
