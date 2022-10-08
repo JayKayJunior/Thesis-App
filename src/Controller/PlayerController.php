@@ -19,6 +19,7 @@ class PlayerController extends AbstractController
              'nick' => $nick,
              'tagLine' => $tagLine,
 
+
              'controller_name' => 'PlayerController',
          ]);
      }
