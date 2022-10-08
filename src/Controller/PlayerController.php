@@ -14,15 +14,17 @@ class PlayerController extends AbstractController
     public function index($tagLine,$nick,HttpClientInterface $httpClient): Response
     {
     $decodeJson = (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontByNick($nick, $tagLine,$httpClient);
-     if(is_int($decodeJson)) {
-         return $this->render('player/player_not_found.html.twig', [
-             'nick' => $nick,
-             'tagLine' => $tagLine,
+    if($decodeJson == NULL){
+        return $this->render('player/player_not_found.html.twig', [
+            'nick' => $nick,
+            'tagLine' => $tagLine,
+        ]);
+    }
 
 
-             'controller_name' => 'PlayerController',
-         ]);
-     }
+
+
+
         return $this->render('player/player.html.twig', [
             'nick' => $nick,
             'tagLine' => $tagLine,

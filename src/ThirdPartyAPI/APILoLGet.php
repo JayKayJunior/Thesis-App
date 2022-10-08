@@ -2,7 +2,7 @@
 
 namespace App\ThirdPartyAPI;
 
-
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class APILoLGet
 {
     public function getLoLHeaders()
@@ -23,14 +23,13 @@ class APILoLGet
         $head = $this->getLoLHeaders();
         $response = $httpClient->request('GET', "https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{$nick}/{$tagLine}",$head);
 
-        $statusCode = $response->getStatusCode();
-        if ($statusCode == 200) {
-            $content = $response->getContent();
-            $decode = json_decode($content);
-            return ($decode);
+        if (200 !== $response->getStatusCode()){
+            return (NULL);
         }
-        return ($statusCode);
+        $content = $response->getContent();
+        $decode = json_decode($content);
+        return ($decode);
+        }
     }
 
-
-}
+    
