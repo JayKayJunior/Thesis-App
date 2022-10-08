@@ -2,7 +2,8 @@
 
 namespace App\ThirdPartyAPI;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Player;
+
 class APILoLGet
 {
     public function getLoLHeaders()
@@ -17,18 +18,17 @@ class APILoLGet
 
     }
 
-    public function getLoLAccontByNick(string $nick, string $tagLine, $httpClient)
+    public function getLoLAccontByNick(player $player, $httpClient)
     {
-
-        $head = $this->getLoLHeaders();
-        $response = $httpClient->request('GET', "https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{$nick}/{$tagLine}",$head);
+        $response = $httpClient->request('GET', "https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{$player->getGameName()}/{$player->getTagLine()}",$this->getLoLHeaders());
 
         if (200 !== $response->getStatusCode()){
-            return (NULL);
+            return ($player);
         }
         $content = $response->getContent();
         $decode = json_decode($content);
-        return ($decode);
+        $player->setPuuid($decode->puuid);
+        return ($player);
         }
     }
 
