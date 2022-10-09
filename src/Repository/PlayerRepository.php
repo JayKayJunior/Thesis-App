@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Player;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @extends ServiceEntityRepository<Player>
@@ -16,9 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PlayerRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+
+    public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
         parent::__construct($registry, Player::class);
+        $this->em = $em;
     }
 
     public function add(Player $entity, bool $flush = false): void
@@ -53,17 +58,32 @@ class PlayerRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByGameName($gameName,$tagLine): array
+    public function findByGameName($gameName,$tagLine,$httpClient): Player
     {
-        return $this->createQueryBuilder('p')
+        $array = $this->createQueryBuilder('p')
             ->andWhere('p.gameName = :gameName')
             ->setParameter('gameName', $gameName)
             ->andWhere('p.tagLine = :tagLine')
             ->setParameter('tagLine', $tagLine)
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+
+        if($array == []) {
+            $player = new Player();
+            $player->setGameName($gameName);
+            $player->setTagLine($tagLine);
+            (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontByNick($player,$httpClient);
+            if ($player->getPuuid() == NULL) {
+                return $player;
+            }else{
+                $this->em->persist($player);
+                $this->em->flush();
+            }
+        }else{
+            $player = $array[0];
+        }
+        return $player;
     }
 
 //    public function findOneBySomeField($value): ?Player

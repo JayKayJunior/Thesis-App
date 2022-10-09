@@ -11,7 +11,13 @@
 <div class="example-wrapper">
     <h1>Hello {{ gameName }} {{ tagLine }}! ✅</h1>
     <h1> {{ puuid }} </h1>
-
+    {% for game in history_games %}
+    <h6>{{ game.participants.0.summonerName }},
+    {{ game.participants.1.summonerName }},
+    {{ game.participants.2.summonerName }},
+    {{ game.participants.3.summonerName }}, 
+    {{ game.participants.4.summonerName }}</h6>
+    {% endfor %}
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ '/var/www/Tournament_Tracker/src/Controller/PlayerController.php'|file_link(0) }}">src/Controller/PlayerController.php</a></code></li>

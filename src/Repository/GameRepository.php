@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Game;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * @extends ServiceEntityRepository<Game>
@@ -16,9 +18,12 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GameRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+
+    public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
         parent::__construct($registry, Game::class);
+        $this->em = $em;
     }
 
     public function add(Game $entity, bool $flush = false): void
@@ -39,6 +44,32 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
+    public function getHistoryGame($matchId,$httpClient): Game
+    {
+//        $array = $this->createQueryBuilder('m')
+//            ->andWhere('m.matchId = :matchId')
+//            ->setParameter('matchId', $matchId)
+//            ->setMaxResults(1)
+//            ->getQuery()
+//            ->getResult();
+        $array = [];
+
+        if($array == []) {
+            $game = new Game();
+            $game->setMatchId($matchId);
+            (new \App\ThirdPartyAPI\APILoLGet)->getHistoryMath($game, $httpClient);
+
+            if ($game->getParticipants() == []) {
+                return $game;
+            }else{
+                $this->em->persist($game);
+                $this->em->flush();
+            }
+        }else{
+            $game = $array[0];
+        }
+        return $game;
+    }
 //    /**
 //     * @return Game[] Returns an array of Game objects
 //     */

@@ -8,51 +8,45 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Entity\Player;
-use App\Database\DatabaseBroker;
+use App\Entity\Game;
 use App\Repository\PlayerRepository;
+use App\Repository\GameRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 
 class PlayerController extends AbstractController
 {
-    private $em;
     private $playerRepository;
+    private $gameRepository;
 
-    public function __construct(playerRepository $playerRepository, EntityManagerInterface $em){
+
+    public function __construct(playerRepository $playerRepository,gameRepository $gameRepository){
         $this->playerRepository = $playerRepository;
-        $this->em = $em;
-
+        $this->gameRepository = $gameRepository;
     }
     #[Route('/player/{tagLine}/{gameName}', name: 'app_player',methods:['GET','HEAD'])]
-    public function index($tagLine,$gameName,HttpClientInterface $httpClient): Response
+    public function index($tagLine, $gameName, HttpClientInterface $httpClient): Response
     {
-        $array = $this->playerRepository->findByGameName($gameName,$tagLine);
-        if($array == []) {
-            $player = new Player();
-            $player->setGameName($gameName);
-            $player->setTagLine($tagLine);
-            (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontByNick($player, $httpClient);
-            if ($player->getPuuid() == NULL) {
-                return $this->render('player/player_not_found.html.twig', [
-                    'gameName' => $player->getGameName(),
-                    'tagLine' => $player->getTagLine(),
-                ]);
-            }else{
-                $this->em->persist($player);
-                $this->em->flush();
-            }
-        }else{
-            $player = $array[0];
+        $player = $this->playerRepository->findByGameName($gameName,$tagLine,$httpClient);
+
+        if ($player->getPuuid() == NULL) {
+            return $this->render('player/player_not_found.html.twig', [
+                'gameName' => $player->getGameName(),
+                'tagLine' => $player->getTagLine(),
+            ]);
         }
 
 
-
-
-
+        $historyGame = (new \App\ThirdPartyAPI\APILoLGet)->getHistoryPlayerGames($player, $httpClient);
+        foreach ($historyGame as $matchId){
+            $game = $this->gameRepository->getHistoryGame($matchId,$httpClient);
+            $arrayHistoryGames[] = $game;
+        }
         return $this->render('player/player.html.twig', [
             'gameName' => $player->getGameName(),
             'tagLine' => $player->getTagLine(),
-            'puuid' => $player->getPuuid() ,
+            'puuid' => $player->getPuuid(),
+            'history_games'=> $arrayHistoryGames,
         ]);
     }
 
