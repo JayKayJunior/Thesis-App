@@ -46,13 +46,12 @@ class GameRepository extends ServiceEntityRepository
 
     public function getHistoryGame($matchId,$httpClient): Game
     {
-//        $array = $this->createQueryBuilder('m')
-//            ->andWhere('m.matchId = :matchId')
-//            ->setParameter('matchId', $matchId)
-//            ->setMaxResults(1)
-//            ->getQuery()
-//            ->getResult();
-        $array = [];
+        $array = $this->createQueryBuilder('m')
+            ->andWhere('m.matchId = :matchId')
+            ->setParameter('matchId', $matchId)
+            ->setMaxResults(1)
+            ->getQuery()
+           ->getResult();
 
         if($array == []) {
             $game = new Game();

@@ -31,21 +31,21 @@ class PlayerController extends AbstractController
 
         if ($player->getPuuid() == NULL) {
             return $this->render('player/player_not_found.html.twig', [
-                'gameName' => $player->getGameName(),
-                'tagLine' => $player->getTagLine(),
+                'player' => $player,
+
             ]);
         }
 
 
         $historyGame = (new \App\ThirdPartyAPI\APILoLGet)->getHistoryPlayerGames($player, $httpClient);
+        $arrayHistoryGames = [];
         foreach ($historyGame as $matchId){
             $game = $this->gameRepository->getHistoryGame($matchId,$httpClient);
             $arrayHistoryGames[] = $game;
         }
+
         return $this->render('player/player.html.twig', [
-            'gameName' => $player->getGameName(),
-            'tagLine' => $player->getTagLine(),
-            'puuid' => $player->getPuuid(),
+            'player' => $player,
             'history_games'=> $arrayHistoryGames,
         ]);
     }

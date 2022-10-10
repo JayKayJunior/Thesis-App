@@ -31,7 +31,7 @@ class APILoLGet
         return ($player);
     }
 
-    public function getHistoryPlayerGames(player $player, $httpClient, $from = 0, $to = 5)
+    public function getHistoryPlayerGames(player $player, $httpClient, $from = 0, $to = 10)
     {
         $response = $httpClient->request('GET', "https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/{$player->getPuuid()}/ids?start=0&count={$to}",$this->getLoLHeaders());
         if (200 !== $response->getStatusCode()){
