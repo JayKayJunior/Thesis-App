@@ -1,22 +1,202 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Player {{ gameName }} Hello Controller!{% endblock %}
+
+{% block title %} Player {{ player.gameName }} Hello Controller!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div class="relative flex h-16 items-center justify-between">
+                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+
+                </div>
+                <div class="flex flex-1 items-left lg:justify-center sm:items-stretch" >
+                    <div class=" sm:flex sm:flex-shrink-0 inset-y-0 left-0 flex items-center ">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="white" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+                        </svg>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:block">
+                        <div class="flex space-x-4">
+                            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                            <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Podgląd</a>
+
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Historia</a>
+
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Turnieje</a>
+
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Zarządzaj turniejem</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                    <div class="flex space-x-4">
+                        <div class="space-x-4">
+                            <label for="price" class="block text-sm font-medium text-gray-300">Wyszukaj przywoływacza</label>
+                            <div class="relative mt-1 rounded-md shadow-sm">
+                                <input type="text" name="price" id="price" class="block w-full rounded-md border-gray-300 pl-7 pr-12 sm:text-sm" placeholder="Nick">
+                                <div class="absolute inset-y-0 right-0 flex">
+                                    <label for="searth" class="sr-only">Searth</label>
+                                    <select id="searth" name="Searth" class="h-full rounded-md border-transparent bg-transparent py-0 pl-2 pr-6 text-gray-500  sm:text-sm">
+                                        <option>EUW</option>
+                                        <option>EUNE</option>
+                                        <option>NA</option>
+                                        <option>BR</option>
+                                        <option>JP</option>
+                                        <option>RU</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                            LOG IN
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="sm:hidden" id="mobile-menu">
+            <div class="space-y-1 px-2 pt-2 pb-3">
+                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                <a href="#" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Podgląd</a>
+
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Historia</a>
+
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Turnieje</a>
+
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Zarządzaj turniejem</a>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+    <div class="bg-white py-12">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-left">
+                <p class="mt-2 text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl">{{ player.gameName }} ({{ player.tagLine }})</p>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500">Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam voluptatum cupiditate veritatis in accusamus quisquam.</p>
+            </div>
+
+            <div class="mt-10">
+                <dl class="space-y-5 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 sm:space-y-0">
+                    {% for game in history_games %}
+                    <div class="relative mt-5 bg-gray-300">
+                        <dl class="space-y-2 sm:grid sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5 sm:space-y-2">
+                            <p>{{ game.matchId }}</p><br>
+                                <dd class="mt-1 ml-2 text-base text-gray-500 bg-blue-300">
+                                    {{ game.participants.0.summonerName }}<br>
+                                    {{ game.participants.1.summonerName }}<br>
+                                    {{ game.participants.2.summonerName }}<br>
+                                    {{ game.participants.3.summonerName }}<br>
+                                    {{ game.participants.4.summonerName }}
+                                </dd>
+                                <dd class="mt-1 ml-2 text-base text-gray-500 bg-red-300">
+                                    {{ game.participants.5.summonerName }}<br>
+                                    {{ game.participants.6.summonerName }}<br>
+                                    {{ game.participants.7.summonerName }}<br>
+                                    {{ game.participants.8.summonerName }}<br>
+                                    {{ game.participants.9.summonerName }}
+                                </dd>
+                        </dl>
+                    </div>
+                    {% endfor %}
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/bolt -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Transfers are instant</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/chat-bubble-bottom-center-text -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Mobile notifications</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/globe-alt -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Competitive exchange rates</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/scale -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">No hidden fees</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/bolt -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Transfers are instant</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-indigo-500 text-white">
+                                <!-- Heroicon name: outline/chat-bubble-bottom-center-text -->
+                                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                </svg>
+                            </div>
+                            <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Mobile notifications</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
 
 <div class="example-wrapper">
-    <h1>Hello {{ gameName }} {{ tagLine }}! ✅</h1>
-    <h1> {{ puuid }} </h1>
+    <h1>Hello {{ player.gameName }} {{ player.tagLine }}! ✅</h1>
+    <h1> {{ player.puuid }} </h1>
     {% for game in history_games %}
-    <h6>{{ game.participants.0.summonerName }},
-    {{ game.participants.1.summonerName }},
-    {{ game.participants.2.summonerName }},
-    {{ game.participants.3.summonerName }}, 
-    {{ game.participants.4.summonerName }}</h6>
+        {% for participants in game.participants %}
+                {{ participants.summonerName }},
+        {% endfor %}
+        <br>
     {% endfor %}
     This friendly message is coming from:
     <ul>
@@ -24,4 +204,7 @@
         <li>Your template at <code><a href="{{ '/var/www/Tournament_Tracker/templates/player/player.html.twig'|file_link(0) }}">templates/player/player.html.twig</a></code></li>
     </ul>
 </div>
+
+
+
 {% endblock %}
