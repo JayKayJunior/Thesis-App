@@ -87,22 +87,28 @@
             <div class="mt-10">
                 <dl class="space-y-5 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-10 sm:space-y-0">
                     <div class="relative">
+                        {% for rang in rangsPlayer  %}
+                            {% if rang.queueType == 'RANKED_SOLO_5x5' %}
                         <dt>
                             <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Kolejka Solo/Duo</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Ranga: {{ rangsPlayer.0.tier }} Poziom: {{ rangsPlayer.0.rank }} Pynkty:  {{ rangsPlayer.0.leaguePoints }}<br>
-                            Wygrane: {{ rangsPlayer.0.wins }} Przegrane: {{ rangsPlayer.0.losses }}<br>
-                            Stosunek : {{ rangsPlayer.0.procentWin }}
+                            Ranga: {{ rang.tier }} Poziom: {{ rang.rank }} Pynkty:  {{ rang.leaguePoints }}<br>
+                            Wygrane: {{ rang.wins }} Przegrane: {{ rang.losses }}<br>
+                            Stosunek : {{ rang.procentWin }}
                         </dd> <br>
+                            {% endif %}
+                            {% if rang.queueType == 'RANKED_FLEX_SR' %}
                         <dt>
                             <p class="ml-16 text-lg font-medium leading-6 text-gray-900">Kolejka Flex</p>
                         </dt>
                         <dd class="mt-2 ml-16 text-base text-gray-500">
-                            Ranga: {{ rangsPlayer.1.tier }} Dywizja: {{ rangsPlayer.1.rank }} Pynkty:  {{ rangsPlayer.1.leaguePoints }}<br>
-                            Wygrane: {{ rangsPlayer.1.wins }} Przegrane: {{ rangsPlayer.1.losses }}<br>
-                            Stosunek : {{ rangsPlayer.1.procentWin }}
+                            Ranga: {{ rang.tier }} Dywizja: {{ rang.rank }} Pynkty:  {{ rang.leaguePoints }}<br>
+                            Wygrane: {{ rang.wins }} Przegrane: {{ rang.losses }}<br>
+                            Stosunek : {{ rang.procentWin }}
                         </dd> <br>
+                            {% endif %}
+                        {% endfor %}
                     </div>
 
                     {% for game in history_games %}

@@ -21,8 +21,17 @@ class GameController extends AbstractController
     public function index($matchId,HttpClientInterface $httpClient): Response
     {
         $game = $this->gameRepository->getHistoryGame($matchId,$httpClient);
+        if($game->getParticipants() == []){
+            return $this->render('game/game_not_found.html.twig', [
+                'game' => $game,
+            ]);
+        }
+        $str = $game->getMatchId();
+        $pattern = '/(?<serwer>.*?)_/';
+        preg_match($pattern, $str,$serwer);
 
         return $this->render('game/game.html.twig', [
+            'serwer' => $serwer['serwer'],
             'game' => $game,
         ]);
     }

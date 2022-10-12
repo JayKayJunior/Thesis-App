@@ -57,12 +57,15 @@ class GameRepository extends ServiceEntityRepository
             $game = new Game();
             $game->setMatchId($matchId);
             (new \App\ThirdPartyAPI\APILoLGet)->getHistoryMath($game, $httpClient);
-
             if ($game->getParticipants() == []) {
                 return $game;
             }else{
-                $time = gmdate("i:s", $game->getGameDuration());
-                $game->setGameDuration($time);
+                $timeH = gmdate("h", $game->getGameDuration());
+                if($timeH == 12){
+                    $game->setGameDuration(gmdate("i:s", $game->getGameDuration()));
+                }else{
+                    $game->setGameDuration(gmdate("h:i:s", $game->getGameDuration()));
+                }
                 $arrayTeamBlue = [];
                 $arrayTeamRed = [];
                 foreach ($game->getParticipants() as $parcipiant) {
@@ -122,7 +125,6 @@ class GameRepository extends ServiceEntityRepository
         }else{
             $game = $array[0];
         }
-        
         return $game;
     }
 //    /**

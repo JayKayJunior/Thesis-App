@@ -32,9 +32,11 @@ class PlayerController extends AbstractController
 
         $historyGame = (new \App\ThirdPartyAPI\APILoLGet)->getHistoryPlayerGames($player, $httpClient, $to, $many);
         $arrayHistoryGames = [];
-        foreach ($historyGame as $matchId){
-            $game = $this->gameRepository->getHistoryGame($matchId,$httpClient);
-            $arrayHistoryGames[] = $game;
+        foreach ($historyGame as $matchId) {
+            $game = $this->gameRepository->getHistoryGame($matchId, $httpClient);
+            if (!($game->getTeams() == [] )) {
+                $arrayHistoryGames[] = $game;
+            }
         }
         return $arrayHistoryGames;
     }
@@ -44,14 +46,8 @@ class PlayerController extends AbstractController
 
         $player = $this->playerRepository->findByGameName($gameName,$serwer,$httpClient);
 
-        if ($player->getPuuid() == NULL) {
-            return $this->render('player/player_not_found.html.twig', [
-                'player' => $player,
-
-            ]);
-        }
-            return  $player;
-        }
+        return $player;
+    }
 
 
 
@@ -59,6 +55,11 @@ class PlayerController extends AbstractController
     public function player($serwer, $gameName, HttpClientInterface $httpClient): Response
     {
         $player = $this->getPlayer($gameName,$serwer, $httpClient);
+        if ($player->getPuuid() == NULL) {
+            return $this->render('player/player_not_found.html.twig', [
+                'player' => $player,
+            ]);
+        }
 
         $historyGames = $this->historyGames($player, $httpClient, 0 ,3);
 
@@ -67,6 +68,7 @@ class PlayerController extends AbstractController
             $procentWin = (round(($typeGame->wins / ($typeGame->wins + $typeGame->losses)) * 100, 2) . "%");
             $typeGame->procentWin = $procentWin;
         }
+
 
         return $this->render('player/player_found.html.twig', [
             'player' => $player,
@@ -83,15 +85,21 @@ class PlayerController extends AbstractController
     public function history($serwer, $gameName, HttpClientInterface $httpClient, $to = 0, $many = 10): Response
     {
         $player = $this->getPlayer($gameName,$serwer, $httpClient);
+        if ($player->getPuuid() == NULL) {
+            return $this->render('player/player_not_found.html.twig', [
+                'player' => $player,
+            ]);
+        }
 
         $historyGames = $this->historyGames($player, $httpClient, $to, $many);
-        dd($historyGames);
+
         return $this->render('history/history.html.twig', [
             'player' => $player,
             'history_games' => $historyGames,
             'to' => $to,
         ]);
     }
+
 }
 
 

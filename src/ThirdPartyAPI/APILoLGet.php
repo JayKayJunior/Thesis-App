@@ -83,8 +83,10 @@ class APILoLGet
         $game->setPlatformId($decode->info->platformId);
         $game->setQueueId($decode->info->queueId);
         $game->setTeams($decode->info->teams);
-        $game->setTournamentCode($decode->info->tournamentCode);
-
+        if(isset($decode->info->tournamentCode)) {
+            $game->setTournamentCode($decode->info->tournamentCode);
+        }
+        $game->setTournamentCode('NULL');
         return ($game);
     }
 

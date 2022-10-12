@@ -74,16 +74,20 @@ class PlayerRepository extends ServiceEntityRepository
             $player->setGameName($gameName);
             $player->setSerwer($serwer);
 
-        }else{
-            $player = $array[0];
+            (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontBySummonerName($player,$httpClient);
+            if ($player->getPuuid() == NULL) {
+                return $player;
+
+            }else{
+                $this->em->persist($player);
+                $this->em->flush();
+            }
+
+
+            }else{
+                $player = $array[0];
         }
-        (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontBySummonerName($player,$httpClient);
-        if ($player->getPuuid() == NULL) {
-            return $player;
-        }else{
-            $this->em->persist($player);
-            $this->em->flush();
-        }
+
         return $player;
     }
 
