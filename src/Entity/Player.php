@@ -19,8 +19,20 @@ class Player
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $gameName;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $tagLine;
+    #[ORM\Column(length: 56)]
+    private ?string $accountId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $profileIconId = null;
+
+    #[ORM\Column(length: 63)]
+    private ?string $gameId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $summonerLevel = null;
+
+    #[ORM\Column(length: 4)]
+    private ?string $serwer = null;
 
     public function getId(): ?int
     {
@@ -51,14 +63,62 @@ class Player
         return $this;
     }
 
-    public function getTagLine(): ?string
+    public function getAccountId(): ?string
     {
-        return $this->tagLine;
+        return $this->accountId;
     }
 
-    public function setTagLine(?string $tagLine): self
+    public function setAccountId(string $accountId): self
     {
-        $this->tagLine = $tagLine;
+        $this->accountId = $accountId;
+
+        return $this;
+    }
+
+    public function getProfileIconId(): ?int
+    {
+        return $this->profileIconId;
+    }
+
+    public function setProfileIconId(?int $profileIconId): self
+    {
+        $this->profileIconId = $profileIconId;
+
+        return $this;
+    }
+
+    public function getGameId(): ?string
+    {
+        return $this->gameId;
+    }
+
+    public function setGameId(string $gameId): self
+    {
+        $this->gameId = $gameId;
+
+        return $this;
+    }
+
+    public function getSummonerLevel(): ?int
+    {
+        return $this->summonerLevel;
+    }
+
+    public function setSummonerLevel(?int $summonerLevel): self
+    {
+        $this->summonerLevel = $summonerLevel;
+
+        return $this;
+    }
+
+    public function getSerwer(): ?string
+    {
+        return $this->serwer;
+    }
+
+    public function setSerwer(string $serwer): self
+    {
+        $this->serwer = $serwer;
 
         return $this;
     }

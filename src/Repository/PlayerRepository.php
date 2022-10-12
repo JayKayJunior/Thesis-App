@@ -58,13 +58,13 @@ class PlayerRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByGameName($gameName,$tagLine,$httpClient): Player
+    public function findByGameName($gameName,$serwer,$httpClient): Player
     {
         $array = $this->createQueryBuilder('p')
             ->andWhere('p.gameName = :gameName')
             ->setParameter('gameName', $gameName)
-            ->andWhere('p.tagLine = :tagLine')
-            ->setParameter('tagLine', $tagLine)
+            ->andWhere('p.serwer = :serwer')
+            ->setParameter('serwer', $serwer)
             ->setMaxResults(1)
             ->getQuery()
             ->getResult();
@@ -72,16 +72,17 @@ class PlayerRepository extends ServiceEntityRepository
         if($array == []) {
             $player = new Player();
             $player->setGameName($gameName);
-            $player->setTagLine($tagLine);
-            (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontByNick($player,$httpClient);
-            if ($player->getPuuid() == NULL) {
-                return $player;
-            }else{
-                $this->em->persist($player);
-                $this->em->flush();
-            }
+            $player->setSerwer($serwer);
+
         }else{
             $player = $array[0];
+        }
+        (new \App\ThirdPartyAPI\APILoLGet)->getLoLAccontBySummonerName($player,$httpClient);
+        if ($player->getPuuid() == NULL) {
+            return $player;
+        }else{
+            $this->em->persist($player);
+            $this->em->flush();
         }
         return $player;
     }

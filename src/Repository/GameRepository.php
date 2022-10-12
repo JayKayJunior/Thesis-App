@@ -61,12 +61,68 @@ class GameRepository extends ServiceEntityRepository
             if ($game->getParticipants() == []) {
                 return $game;
             }else{
+                $time = gmdate("i:s", $game->getGameDuration());
+                $game->setGameDuration($time);
+                $arrayTeamBlue = [];
+                $arrayTeamRed = [];
+                foreach ($game->getParticipants() as $parcipiant) {
+                    if($parcipiant->championName == 'FiddleSticks'){
+                        $parcipiant->championName = 'Fiddlesticks';
+                    }
+                    if ($parcipiant->teamId == 100){
+                        $arrayTeamBlue[]=$parcipiant;
+                    }else{
+                        $arrayTeamRed[]=$parcipiant;
+                    }
+                }
+                $array[] = $arrayTeamBlue;
+                $array[] = $arrayTeamRed;
+                $game->setParticipants($array);
+
+
+
+                $teams = $game->getTeams();
+                if(!(isset($teams[1]->teamId))){
+                    if($teams[0]->teamId == 100){
+                        $arrayRedT = array("bans"=>[],
+                            "objectives"=>[
+                                "baron"=>["first"=>false, "kills"=>0],
+                                "champion"=>["first"=>false,"kills"=>0],
+                                "dragon"=>["first"=>false, "kills"=>0],
+                                "inhibitor"=>["first"=>false,"kills"=>0],
+                                "riftHerald"=>["first"=>false,"kills"=>0],
+                                "tower"=>["first"=>false, "kills"=>0]
+                            ],
+                            "teamId"=>200,
+                            "win"=>false);
+                        $teams[] = $arrayRedT;
+                        $game->setTeams($teams);
+                    }else{
+                        $arrayRedT = $teams[0];
+                        $arrayBlueT = array("bans"=>[],
+                            "objectives"=>[
+                                "baron"=>["first"=>false, "kills"=>0],
+                                "champion"=>["first"=>false,"kills"=>0],
+                                "dragon"=>["first"=>false, "kills"=>0],
+                                "inhibitor"=>["first"=>false,"kills"=>0],
+                                "riftHerald"=>["first"=>false,"kills"=>0],
+                                "tower"=>["first"=>false, "kills"=>0]
+                            ],
+                            "teamId"=>100,
+                            "win"=>false);
+                        $newTeams[] = $arrayBlueT;
+                        $newTeams[] = $arrayRedT;
+                        $game->setTeams($newTeams);
+                    }
+                }
+
                 $this->em->persist($game);
                 $this->em->flush();
             }
         }else{
             $game = $array[0];
         }
+        
         return $game;
     }
 //    /**

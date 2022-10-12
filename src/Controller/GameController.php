@@ -16,11 +16,13 @@ class GameController extends AbstractController
         $this->gameRepository = $gameRepository;
     }
 
+
     #[Route('/game/{matchId}', name: 'app_game')]
     public function index($matchId,HttpClientInterface $httpClient): Response
     {
         $game = $this->gameRepository->getHistoryGame($matchId,$httpClient);
-        return $this->render('game/index.html.twig', [
+
+        return $this->render('game/game.html.twig', [
             'game' => $game,
         ]);
     }

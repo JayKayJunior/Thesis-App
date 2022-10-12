@@ -24,10 +24,7 @@ class Game
     private ?string $gameCreation = null;
 
     #[ORM\Column]
-    private ?int $gameDuration = null;
-
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $gameEndTimestamp = null;
+    private ?string $gameDuration = null;
 
     #[ORM\Column(type: Types::BIGINT)]
     private ?string $gameId = null;
@@ -97,26 +94,14 @@ class Game
         return $this;
     }
 
-    public function getGameDuration(): ?int
+    public function getGameDuration(): ?string
     {
         return $this->gameDuration;
     }
 
-    public function setGameDuration(int $gameDuration): self
+    public function setGameDuration(string $gameDuration): self
     {
         $this->gameDuration = $gameDuration;
-
-        return $this;
-    }
-
-    public function getGameEndTimestamp(): ?string
-    {
-        return $this->gameEndTimestamp;
-    }
-
-    public function setGameEndTimestamp(string $gameEndTimestamp): self
-    {
-        $this->gameEndTimestamp = $gameEndTimestamp;
 
         return $this;
     }
